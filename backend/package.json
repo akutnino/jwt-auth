@@ -4,7 +4,9 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"build": "rimraf dist && npx tsc",
+		"start": "node dist/index.js",
+		"dev": "concurrently \"npx tsc -w\" \"nodemon dist/index.js\""
 	},
 	"keywords": [],
 	"author": "Nino Akut",
@@ -16,6 +18,9 @@
 		"@types/eslint": "^9.6.1",
 		"@types/express": "^5.0.0",
 		"@types/node": "^22.9.1",
+		"concurrently": "^9.1.0",
+		"nodemon": "^3.1.7",
+		"rimraf": "^6.0.1",
 		"typescript": "^5.6.3"
 	}
 }

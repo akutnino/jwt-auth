@@ -4,8 +4,7 @@ const PORT = 8000;
 const app: Express = express();
 
 app.get('/', (req: Request, res: Response) => {
-	res.send('HELLO FROM EXPRESS + TS!!!!');
-	console.log(req);
+	res.send('HELLO FROM EXPRESS + TS + NODEMON!!!!');
 });
 
 app.listen(PORT, () => {
