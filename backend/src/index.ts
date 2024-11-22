@@ -1,15 +1,16 @@
-import express, { Express, Request, Response } from 'express';
-import { router as auth } from './routes/auth.js';
+import express, { Express } from 'express';
+import { auth } from './routes/auth.js';
+import { root } from './routes/root.js';
 
 const PORT: number = 8000;
 const app: Express = express();
 
-app.use('/auth', auth);
+// built-in middleware for json
+app.use(express.json());
 
-app.get('/', (req: Request, res: Response) => {
-	res.send('HELLO FROM EXPRESS + TS + NODEMON!!!!');
-	console.log(Boolean(req));
-});
+// routes
+app.use('/', root);
+app.use('/auth', auth);
 
 app.listen(PORT, () => {
 	console.log(`now listening on port: ${PORT}`);

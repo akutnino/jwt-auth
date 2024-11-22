@@ -1,10 +1,13 @@
-import Router, { Express, Request, Response } from 'express';
+import express, { Router, Request, Response } from 'express';
 
-const router: Express = Router();
+const router: Router = express.Router();
 
-router.get('/', (req: Request, res: Response) => {
+router.post('/signup', (req: Request, res: Response) => {
+	const { password, email } = req.body;
+
 	res.send('Auth route working');
-	console.log(Boolean(req));
+
+	console.log(password, email);
 });
 
-export { router };
+export { router as auth };
