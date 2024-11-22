@@ -1,7 +1,10 @@
 import express, { Express, Request, Response } from 'express';
+import { router as auth } from './routes/auth.js';
 
-const PORT = 8000;
+const PORT: number = 8000;
 const app: Express = express();
+
+app.use('/auth', auth);
 
 app.get('/', (req: Request, res: Response) => {
 	res.send('HELLO FROM EXPRESS + TS + NODEMON!!!!');
