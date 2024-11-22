@@ -1,11 +1,19 @@
 import express, { Router, Request, Response } from 'express';
+import { check, validationResult } from 'express-validator';
 
 const router: Router = express.Router();
 
-router.post('/signup', (req: Request, res: Response) => {
-	const { password, email } = req.body;
+const baseAuthChain = [
+	check('email', 'Please provide a valid email.').isEmail(),
+	check('password', 'Please provide a valid password.').isLength({ min: 6 }),
+];
 
-	res.send('Auth route working');
+router.post('/signup', baseAuthChain, (req: Request, res: Response) => {
+	const { password, email } = req.body;
+	const errors = validationResult(req);
+
+	if (!errors.isEmpty()) res.status(400).json({ errors: errors.array() });
+	res.send('Validation Passed');
 
 	console.log(password, email);
 });
