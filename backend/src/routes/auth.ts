@@ -2,6 +2,11 @@ import express, { Router, Request, Response } from 'express';
 import { check, validationResult } from 'express-validator';
 import Users from '../db.js';
 
+export type UserObect = {
+	email: string;
+	password: string;
+};
+
 const router: Router = express.Router();
 
 const baseAuthChain = [
@@ -17,7 +22,7 @@ router.post('/signup', baseAuthChain, (req: Request, res: Response) => {
 	if (!errors.isEmpty()) res.status(400).json({ errors: errors.array() });
 
 	// VALIDATE IF USER EXIST
-	const userObject = Users.find((user) => user.email === email);
+	const userObject: UserObect | undefined = Users.find((user) => user.email === email);
 
 	// prettier-ignore
 	if (userObject?.email) res.status(400).json({
