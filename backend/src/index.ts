@@ -1,6 +1,7 @@
 import express, { Express } from 'express';
 import { auth } from './routes/auth.js';
 import { root } from './routes/root.js';
+import { users } from './routes/users.js';
 
 const PORT: number = 8000;
 const app: Express = express();
@@ -11,6 +12,7 @@ app.use(express.json());
 // routes
 app.use('/', root);
 app.use('/auth', auth);
+app.use('/users', users);
 
 app.listen(PORT, () => {
 	console.log(`now listening on port: ${PORT}`);
