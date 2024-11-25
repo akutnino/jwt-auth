@@ -9,7 +9,7 @@ export type UserObect = {
 	password: string;
 };
 
-type UserFindType = UserObect | undefined;
+export type UserFindType = UserObect | undefined;
 
 const router: Router = express.Router();
 
@@ -18,24 +18,21 @@ const baseAuthChain = [
 	check('password', 'Please provide a valid password.').isLength({ min: 6 }),
 ];
 
+export const PRIVATE_SECRET_KEY = 'vw45ghyth6uj678k90l3535ferr4cr';
+
 router.post('/signup', baseAuthChain, async (req: Request, res: Response) => {
 	const { password, email } = req.body;
 	const errors = validationResult(req);
+	const errorObject = { errors: [{ msg: 'This user already exits.' }] };
 	const SALT_ROUNDS = 10;
 
 	// VALIDATE USER INPUT
-	if (!errors.isEmpty()) {
-		res.status(400).json({ errors: errors.array() });
-		return;
-	}
+	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() }) as never;
 
 	// VALIDATE IF USER EXIST
 	const userObject: UserFindType = Users.find((user) => user.email === email);
 
-	if (userObject?.email) {
-		res.status(400).json({ errors: { msg: 'This user already exits.' } });
-		return;
-	}
+	if (userObject?.email) return res.status(400).json(errorObject) as never;
 
 	// HASH THE NEW USER PASSWORD
 	const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
@@ -44,13 +41,12 @@ router.post('/signup', baseAuthChain, async (req: Request, res: Response) => {
 	Users.push({ email, password: hashedPassword });
 
 	// CREATE JWT
-	const PRIVATE_SECRET_KEY = 'vw45ghyth6uj678k90l3535ferr4cr';
 	const token = JWT.sign({ email }, PRIVATE_SECRET_KEY, {
 		expiresIn: 60000 * 60,
 	});
 
 	// SEND THE TOKEN BACK TO THE CLIENT
-	res.send(token);
+	res.json({ token });
 });
 
 export { router as auth };
